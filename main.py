@@ -1,8 +1,8 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect
 from dotenv import load_dotenv
 
 
-from util import json_response
+from util import json_response, hash_password
 import mimetypes
 import queries
 
@@ -43,8 +43,15 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/register')
+@app.route('/register', methods=["POST", "GET"])
 def register():
+    if request.method == "POST":
+        user_name = str(request.form.get('user_name'))
+        password = str(request.form.get('password'))
+        hash = hash_password(password)
+        user = queries.add_user(user_name, hash)
+        print(user)
+        return redirect('/')
     return render_template('register.html')
 
 

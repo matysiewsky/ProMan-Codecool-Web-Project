@@ -20,10 +20,18 @@ SET default_with_oids = false;
 DROP TABLE IF EXISTS statuses CASCADE;
 DROP TABLE IF EXISTS boards CASCADE;
 DROP TABLE IF EXISTS cards;
+DROP TABLE IF EXISTS users;
 
 ---
 --- create tables
 ---
+
+CREATE TABLE users (
+    id       SERIAL PRIMARY KEY     NOT NULL,
+    username    VARCHAR(200)           NOT NULL,
+    hash text,
+    registration_date date
+);
 
 CREATE TABLE statuses (
     id       SERIAL PRIMARY KEY     NOT NULL,
@@ -67,6 +75,9 @@ INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 2, 'in progress card', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 3, 'planning', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 4, 'done card 1', 1);
 INSERT INTO cards VALUES (nextval('cards_id_seq'), 2, 4, 'done card 1', 2);
+INSERT INTO users VALUES (1, 'user1', '$2b$12$ARGAA1xEbi.dA4esWPtwgupqkeQO35OWtckGeJBurllc90xzJ61iO', '2017-05-02');
+INSERT INTO users VALUES (2, 'user2', '$2b$12$ARGAA1xEbi.dA4esWPtwgupqkeQO35OWtckGeJBurllc90xzJ61iO', '2020-03-17');
+INSERT INTO users VALUES (3, 'user3', '$2b$12$ARGAA1xEbi.dA4esWPtwgupqkeQO35OWtckGeJBurllc90xzJ61iO', '2021-08-31');
 
 ---
 --- add constraints
