@@ -43,7 +43,7 @@ def get_cards_for_board(board_id):
 
 
 def add_user(username, hash):
-    new_user = data_manager.execute_select(
+    new_user = data_manager.execute_insert(
         """
         INSERT INTO users
         (id, username, hash, registration_date)
