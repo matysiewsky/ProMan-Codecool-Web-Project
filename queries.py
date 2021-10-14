@@ -1,4 +1,5 @@
 import data_manager
+import connection
 
 
 def get_card_status(status_id):
@@ -42,13 +43,20 @@ def get_cards_for_board(board_id):
     return matching_cards
 
 
-def add_user(username, hash):
-    new_user = data_manager.execute_insert(
-        """
-        INSERT INTO users
-        (id, username, hash, registration_date)
-        VALUES (DEFAULT, %s, %s, 2012-01-01)
-        ;
-        """
-        , {"username": username, "hash": hash})
-    return new_user
+@connection.connection_handler
+def add_user(cursor, username, hash):
+    query = """
+    INSERT INTO users
+        (username, hash, registration_date)
+        VALUES (%s, %s, CURRENT_TIMESTAMP)
+    """
+    cursor.execute(query, [username, hash])
+
+
+@connection.connection_handler
+def get_user_by_id(cursor, user_id):
+    query = """
+    SELECT id, username, hash, registration_date
+    FROM users
+    WHERE id == %s"""
+    cursor.execute(query, [user_id])
