@@ -51,7 +51,9 @@ def login():
     if request.method == "POST":
         user_name = str(request.form.get('user_name'))
         password = str(request.form.get('password'))
-        user = queries.get_user_by_id(user_name)
+        print(user_name, password)
+        user = queries.get_user_by_username(user_name)
+        print(user)
         if not user:
             message = "This user doesn't exist."
             return render_template('login.html', message=message)
@@ -89,7 +91,7 @@ def login_required(f):
 @app.before_request
 def load_user():
     if session.get("user_name"):
-        user = queries.get_user_by_id(session["id"])
+        user = queries.get_user_by_username(session["user_name"])
     else:
         user = None
     g.user = user

@@ -47,7 +47,7 @@ def get_cards_for_board(board_id):
 def add_user(cursor, username, hash):
     query = """
     INSERT INTO users
-        (username, hash, registration_date)
+        (user_name, hash, registration_date)
         VALUES (%s, %s, CURRENT_TIMESTAMP)
     """
     cursor.execute(query, [username, hash])
@@ -56,7 +56,19 @@ def add_user(cursor, username, hash):
 @connection.connection_handler
 def get_user_by_id(cursor, user_id):
     query = """
-    SELECT id, username, hash, registration_date
+    SELECT id, user_name, hash, registration_date
     FROM users
-    WHERE id == %s"""
+    WHERE id = %s"""
     cursor.execute(query, [user_id])
+    return cursor.fetchone()
+
+
+@connection.connection_handler
+def get_user_by_username(cursor, user_name):
+    query = '''
+        SELECT *
+        FROM users
+        WHERE user_name LIKE %s
+    '''
+    cursor.execute(query, [user_name])
+    return cursor.fetchone()

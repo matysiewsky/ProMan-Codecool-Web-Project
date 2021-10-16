@@ -28,7 +28,7 @@ DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
     id       SERIAL PRIMARY KEY     NOT NULL,
-    username    VARCHAR(200)           NOT NULL,
+    user_name    VARCHAR(200)           NOT NULL,
     hash text,
     registration_date date
 );

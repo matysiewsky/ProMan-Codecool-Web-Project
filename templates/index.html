@@ -15,6 +15,11 @@
         <script type="module" src="{{ url_for('static', filename='js/main.js') }}" defer></script>
     </head>
     <body>
+    {% if g.user %}
+    <p>Logged in as: {{ g.user['user_name'] }}</p>
+    {% endif %}
+    <a href="{{ url_for('register') }}"><p>REGISTER</p></a>
+    <a href="{{ url_for('login') }}"><p>LOGIN</p></a>
         <div id="root"></div>
     </body>
 </html>
