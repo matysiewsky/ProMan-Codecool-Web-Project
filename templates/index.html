@@ -17,9 +17,11 @@
     <body>
     {% if g.user %}
     <p>Logged in as: {{ g.user['user_name'] }}</p>
-    {% endif %}
+    <a href="{{ url_for('logout') }}"><p>LOGOUT</p></a>
+    {% else %}
     <a href="{{ url_for('register') }}"><p>REGISTER</p></a>
     <a href="{{ url_for('login') }}"><p>LOGIN</p></a>
+    {% endif %}
         <div id="root"></div>
     </body>
 </html>
