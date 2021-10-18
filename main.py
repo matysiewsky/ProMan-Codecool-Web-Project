@@ -42,6 +42,19 @@ def add_board():
     return {'id': id, 'title': board_title}
 
 
+@app.route("/api/boards/<int:board_id>/title", methods=['POST'])
+@json_response
+def edit_board_title(board_id: int):
+    """
+    All the boards
+    """
+    data = dict(request.json)
+    print(data)
+    board_title = data['boardTitle']
+    print(board_title)
+    queires.edit_board_title(board_title, board_id)
+    return {'id': board_id, 'title': board_title}
+
 
 @app.route("/api/boards/<int:board_id>/cards/")
 @json_response

@@ -15,16 +15,22 @@ export let boardsManager = {
                 "click",
                 showHideButtonHandler
             );
+            domManager.addEventListener(
+                `.edit-title-button[data-board-id="${board.id}"]`,
+                "click",
+                boardsManager.editBoardTitle
+            );
         }
     },
-    showAddNewBoard: async function () {
-        document.getElementById("new-board").hidden = true;
+    showNewBoardTitleInput: function () {
+        document.getElementById("new-board").setAttribute("hidden", "true");
         document.getElementById("new-board-input").hidden = false;
         document.getElementById("new-board-ok").hidden = false;
     },
     addNewBoard: async function () {
         let boardTitle = document.getElementById("new-board-input");
-         let board = await dataHandler.createNewBoard(boardTitle.value);
+        console.log(boardTitle)
+        let board = await dataHandler.createNewBoard(boardTitle.value);
         document.getElementById("new-board").hidden = false;
         document.getElementById("new-board-input").hidden = true;
         document.getElementById("new-board-ok").hidden = true;
@@ -36,13 +42,44 @@ export let boardsManager = {
             "click",
             showHideButtonHandler
         );
+    },
+    editBoardTitle(clickEvent) {
+    const boardId = clickEvent.target.dataset.boardId;
+    console.log(boardId)
+    let boardTitle = document.querySelector(`div[data-board-id-title="${boardId}"]`).textContent;
+    let boardField = document.querySelector(`div[data-board-id-title="${boardId}"]`);
+    let editTitleButton = document.querySelector(`.edit-title-button[data-board-id="${boardId}"]`);
 
-    }
+    let button = document.createElement("button");
+    button.textContent = 'Submit';
+    button.className = 'btn';
+    button.id = "btn";
+    button.onclick = async function () {
+        boardField.textContent = inputField.value;
+        await dataHandler.changeBoardTitle(boardField.textContent, boardId);
+        editTitleButton.removeAttribute("hidden");
+        button.remove();
+        inputField.remove();
+
+    };
+
+    const inputField = document.createElement("input");
+    inputField.type = 'text';
+    inputField.value = boardTitle;
+
+    boardField.textContent = '';
+    boardField.appendChild(inputField);
+    boardField.appendChild(button);
+
+    editTitleButton.setAttribute("hidden", "true");
+
+}
+
+
 };
 
 function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
     cardsManager.loadCards(boardId);
 }
-
 

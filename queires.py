@@ -51,3 +51,16 @@ def add_new_board(board_title):
         """
 
     return data_manager.execute_dml_statement(query, [board_title])
+
+def edit_board_title(board_title, board_id):
+    return data_manager.execute_select(
+        """
+        UPDATE boards
+        SET title = %(board_title)s
+        WHERE id = %(board_id)s;
+
+        
+        """
+        , {"id": board_id}, {"title": board_title})
+
+
