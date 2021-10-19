@@ -37,49 +37,75 @@ export let boardsManager = {
         const boardBuilder = htmlFactory(htmlTemplates.board);
         const content = boardBuilder(board);
         domManager.addChild("#root", content);
-        domManager.addEventListener(
-            `.toggle-board-button[data-board-id="${board.id}"]`,
-            "click",
-            showHideButtonHandler
-        );
+
     },
     editBoardTitle(clickEvent) {
-    const boardId = clickEvent.target.dataset.boardId;
-    console.log(boardId)
-    let boardTitle = document.querySelector(`div[data-board-id-title="${boardId}"]`).textContent;
-    let boardField = document.querySelector(`div[data-board-id-title="${boardId}"]`);
-    let editTitleButton = document.querySelector(`.edit-title-button[data-board-id="${boardId}"]`);
+        const boardId = clickEvent.target.dataset.boardId;
+        console.log(boardId)
+        let boardTitle = document.querySelector(`div[data-board-id-title="${boardId}"]`).textContent;
+        let boardField = document.querySelector(`div[data-board-id-title="${boardId}"]`);
+        let editTitleButton = document.querySelector(`.edit-title-button[data-board-id="${boardId}"]`);
 
-    let button = document.createElement("button");
-    button.textContent = 'Submit';
-    button.className = 'btn';
-    button.id = "btn";
-    button.onclick = async function () {
-        boardField.textContent = inputField.value;
-        await dataHandler.changeBoardTitle(boardField.textContent, boardId);
-        editTitleButton.removeAttribute("hidden");
-        button.remove();
-        inputField.remove();
+       let submitButton = createElementOnWebsite("Submit", boardTitle);
+       submitButton.onclick = async function () {
+            editTitleButton.removeAttribute("hidden");
+            boardField.textContent = inputField.value;
+            await dataHandler.changeBoardTitle(boardField.textContent, boardId);
+            submitButton.remove();
+            inputField.remove();
 
-    };
+        };
 
-    const inputField = document.createElement("input");
-    inputField.type = 'text';
-    inputField.value = boardTitle;
+        let inputField = createElementOnWebsite("Input", boardTitle);
 
-    boardField.textContent = '';
-    boardField.appendChild(inputField);
-    boardField.appendChild(button);
+        let cancelButton = createElementOnWebsite("Cancel", boardTitle);
+        cancelButton.onclick = () => {
+            editTitleButton.removeAttribute("hidden");
+            submitButton.remove();
+            inputField.remove();
+            cancelButton.remove();
+            boardField.textContent = boardTitle;
+        }
 
-    editTitleButton.setAttribute("hidden", "true");
+        boardField.textContent = '';
+        boardField.appendChild(inputField);
+        boardField.appendChild(submitButton);
+        boardField.appendChild(cancelButton);
 
-}
+        editTitleButton.setAttribute("hidden", "true");
+
+    }
 
 
 };
 
 function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
-    cardsManager.loadCards(boardId);
+    let takeButton = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`);
+    if (takeButton.textContent === "Show Cards") {
+        cardsManager.loadCards(boardId);
+        takeButton.textContent = "Hide Cards";
+    } else if (takeButton.textContent === "Hide Cards") {
+        document.querySelectorAll(".card").forEach(el => el.remove());
+        takeButton.textContent = "Show Cards";
+    }
+
+
+
+
+
 }
 
+function createElementOnWebsite(type, boardTitle) {
+    if (type === "Submit" || type === "Cancel") {
+        let button = document.createElement("button");
+        button.textContent = type;
+        button.className = 'btn';
+        return button;
+    } else if (type === "Input") {
+        let inputField = document.createElement("input");
+        inputField.type = 'text';
+        inputField.value = boardTitle;
+        return inputField;
+    }
+}

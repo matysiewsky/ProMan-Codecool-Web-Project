@@ -27,6 +27,7 @@ def get_boards():
     return data_manager.execute_select(
         """
         SELECT * FROM boards
+        ORDER BY id
         ;
         """
     )
@@ -52,15 +53,13 @@ def add_new_board(board_title):
 
     return data_manager.execute_dml_statement(query, [board_title])
 
-def edit_board_title(board_title, board_id):
-    return data_manager.execute_select(
-        """
-        UPDATE boards
-        SET title = %(board_title)s
-        WHERE id = %(board_id)s;
 
-        
+def edit_board_title(board_title, board_id):
+    query = f"""
+        UPDATE boards
+        SET title = %s
+        WHERE id = %s;        
         """
-        , {"id": board_id}, {"title": board_title})
+    return data_manager.execute_dml_statement(query, [board_title, board_id])
 
 
