@@ -40,13 +40,14 @@ def add_board():
     print(board_title)
     id = queires.add_new_board(board_title)
     return {'id': id, 'title': board_title}
+# CZEMU RETURN ZA KAZDYM RAZEM
 
 
 @app.route("/api/boards/<int:board_id>/title", methods=['POST'])
 @json_response
 def edit_board_title(board_id: int):
     """
-    All the boards
+    Edit title of existing board
     """
     data = dict(request.json)
     print(data)
@@ -65,6 +66,20 @@ def get_cards_for_board(board_id: int):
     """
     return queires.get_cards_for_board(board_id)
 
+
+@app.route("/api/boards/<int:board_id>/new_card/", methods=['POST'])
+@json_response
+def create_new_card(board_id: int):
+    """
+    Create and add new card to existing board
+    :param board_id: id of the parent board
+    """
+    data = dict(request.json)
+    card_title = data['cardTitle']
+    status_id = 1
+    card_order = 1
+    card_id = queires.add_new_card(card_title, status_id, card_order, board_id)
+    return {'id': card_id[0], 'title': card_title}
 
 def main():
     app.run(debug=True)

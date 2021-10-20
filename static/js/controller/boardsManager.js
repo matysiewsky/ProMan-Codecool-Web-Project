@@ -2,6 +2,7 @@ import {dataHandler} from "../data/dataHandler.js";
 import {htmlFactory, htmlTemplates} from "../view/htmlFactory.js";
 import {domManager} from "../view/domManager.js";
 import {cardsManager} from "./cardsManager.js";
+export {createElementOnWebsite};
 
 export let boardsManager = {
     loadBoards: async function () {
@@ -20,6 +21,11 @@ export let boardsManager = {
                 "click",
                 boardsManager.editBoardTitle
             );
+            domManager.addEventListener(
+                `.create-card-button[data-board-id="${board.id}"]`,
+                "click",
+                cardsManager.addNewCard
+            );
         }
     },
     showNewBoardTitleInput: function () {
@@ -29,7 +35,6 @@ export let boardsManager = {
     },
     addNewBoard: async function () {
         let boardTitle = document.getElementById("new-board-input");
-        console.log(boardTitle)
         let board = await dataHandler.createNewBoard(boardTitle.value);
         document.getElementById("new-board").hidden = false;
         document.getElementById("new-board-input").hidden = true;
@@ -46,17 +51,17 @@ export let boardsManager = {
         let boardField = document.querySelector(`div[data-board-id-title="${boardId}"]`);
         let editTitleButton = document.querySelector(`.edit-title-button[data-board-id="${boardId}"]`);
 
-       let submitButton = createElementOnWebsite("Submit", boardTitle);
+        let inputField = createElementOnWebsite("Input", boardTitle);
+        inputField.value = boardTitle;
+
+        let submitButton = createElementOnWebsite("Submit", boardTitle);
        submitButton.onclick = async function () {
             editTitleButton.removeAttribute("hidden");
             boardField.textContent = inputField.value;
-            await dataHandler.changeBoardTitle(boardField.textContent, boardId);
+            await dataHandler.changeBoardTitle(boardTitle, boardId); //tu moze byc blad bo zmieniłem boardfield.textcontent
             submitButton.remove();
             inputField.remove();
-
         };
-
-        let inputField = createElementOnWebsite("Input", boardTitle);
 
         let cancelButton = createElementOnWebsite("Cancel", boardTitle);
         cancelButton.onclick = () => {
@@ -79,24 +84,21 @@ export let boardsManager = {
 
 };
 
-function showHideButtonHandler(clickEvent) {
+async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
     let takeButton = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`);
+    let board = document.querySelector(`div[data-board-id="${boardId}"]`);
+
     if (takeButton.textContent === "Show Cards") {
-        cardsManager.loadCards(boardId);
+        await cardsManager.loadCards(boardId);
         takeButton.textContent = "Hide Cards";
     } else if (takeButton.textContent === "Hide Cards") {
-        document.querySelectorAll(".card").forEach(el => el.remove());
+        board.querySelectorAll(".card").forEach(el => el.remove());
         takeButton.textContent = "Show Cards";
-    }
-
-
-
-
-
+        }
 }
 
-function createElementOnWebsite(type, boardTitle) {
+function createElementOnWebsite(type) {
     if (type === "Submit" || type === "Cancel") {
         let button = document.createElement("button");
         button.textContent = type;
@@ -105,7 +107,9 @@ function createElementOnWebsite(type, boardTitle) {
     } else if (type === "Input") {
         let inputField = document.createElement("input");
         inputField.type = 'text';
-        inputField.value = boardTitle;
+        inputField.className = "inp"
         return inputField;
     }
 }
+
+// CO ROBI clickevent

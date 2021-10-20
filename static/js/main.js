@@ -17,6 +17,10 @@ function initAddNewBoard() {
     okButton.addEventListener("click", boardsManager.addNewBoard);
 }
 
+function initAddNewCard() {
+    let newCardButton =  document.getElementById("")
+}
+
 
 
 

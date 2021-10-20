@@ -63,3 +63,21 @@ def edit_board_title(board_title, board_id):
     return data_manager.execute_dml_statement(query, [board_title, board_id])
 
 
+def add_new_board(board_title):
+    query = f"""
+        INSERT INTO boards (title)
+        VALUES (%s) 
+        """
+
+    return data_manager.execute_dml_statement(query, [board_title])
+
+# o co cho z tymi rodzajami queries?
+
+def add_new_card(card_title, status_id, card_order, board_id):
+    query = f"""
+        INSERT INTO cards (title, card_order, status_id, board_id)
+        VALUES (%s, %s, %s, %s) 
+        RETURNING id;
+        """
+
+    return data_manager.execute_dml_statement(query, [card_title, status_id, card_order, board_id])
