@@ -51,19 +51,19 @@ export let boardsManager = {
         let boardField = document.querySelector(`div[data-board-id-title="${boardId}"]`);
         let editTitleButton = document.querySelector(`.edit-title-button[data-board-id="${boardId}"]`);
 
-        let inputField = createElementOnWebsite("Input", boardTitle);
+        let inputField = createElementOnWebsite("Input");
         inputField.value = boardTitle;
 
-        let submitButton = createElementOnWebsite("Submit", boardTitle);
-       submitButton.onclick = async function () {
+        let submitButton = createElementOnWebsite("Submit");
+        submitButton.onclick = async function () {
             editTitleButton.removeAttribute("hidden");
             boardField.textContent = inputField.value;
-            await dataHandler.changeBoardTitle(boardTitle, boardId); //tu moze byc blad bo zmieniłem boardfield.textcontent
+            await dataHandler.changeTitle("boards", boardField.textContent, boardId); //tu moze byc blad bo zmieniłem boardfield.textcontent
             submitButton.remove();
             inputField.remove();
         };
 
-        let cancelButton = createElementOnWebsite("Cancel", boardTitle);
+        let cancelButton = createElementOnWebsite("Cancel");
         cancelButton.onclick = () => {
             editTitleButton.removeAttribute("hidden");
             submitButton.remove();
@@ -94,6 +94,7 @@ async function showHideButtonHandler(clickEvent) {
         takeButton.textContent = "Hide Cards";
     } else if (takeButton.textContent === "Hide Cards") {
         board.querySelectorAll(".card").forEach(el => el.remove());
+        board.querySelectorAll(".edit-card-title-button").forEach(el => el.remove());
         takeButton.textContent = "Show Cards";
         }
 }
