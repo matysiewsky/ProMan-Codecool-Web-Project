@@ -93,8 +93,8 @@ async function showHideButtonHandler(clickEvent) {
         await cardsManager.loadCards(boardId);
         takeButton.textContent = "Hide Cards";
     } else if (takeButton.textContent === "Hide Cards") {
-        board.querySelectorAll(".card").forEach(el => el.remove());
-        board.querySelectorAll(".edit-card-title-button").forEach(el => el.remove());
+        board.querySelectorAll(".card-container").forEach(el => el.remove());
+        // board.querySelectorAll(".edit-card-title-button").forEach(el => el.remove());
         takeButton.textContent = "Show Cards";
         }
 }

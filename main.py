@@ -43,18 +43,22 @@ def add_board():
 # CZEMU RETURN ZA KAZDYM RAZEM
 
 
-@app.route("/api/<int:id>/<type>-title", methods=['POST'])
+@app.route("/api/<int:id>/<card_or_board>-title", methods=['POST'])
 @json_response
-def edit_board_title(id: int, type):
+def edit_title(id: int, card_or_board):
     """
-    Edit title of existing board
+    Edit title of existing board or card
     """
     data = dict(request.json)
     print(data)
-    board_title = data['title']
-    print(board_title)
-    queires.edit_board_title(board_title, id)
-    return {'id': id, 'title': board_title}
+    title = data['title']
+    print(title)
+    if card_or_board == "boards":
+        queires.edit_board_title(title, id)
+    else:
+        queires.edit_card_title(title, id)
+
+    return {'id': id, 'title': title}
 
 
 @app.route("/api/boards/<int:board_id>/cards/")

@@ -31,8 +31,8 @@ export let dataHandler = {
         const response = await apiPost(`/api/boards/${boardId}/new_card/`, {cardTitle: cardTitle}, {statusId: statusId});
         return response;
     },
-    changeTitle: async function (type, title, id) {
-        const response = await apiPost(`/api/${id}/${type}-title`, {title: title});
+    changeTitle: async function (card_or_board, title, id) {
+        const response = await apiPost(`/api/${id}/${card_or_board}-title`, {title: title, type: card_or_board});
         return response;
     }
 };

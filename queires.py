@@ -38,6 +38,7 @@ def get_cards_for_board(board_id):
         """
         SELECT * FROM cards
         WHERE cards.board_id = %(board_id)s
+        ORDER BY id
         ;
         """
         , {"board_id": board_id})
@@ -61,6 +62,15 @@ def edit_board_title(board_title, board_id):
         WHERE id = %s;        
         """
     return data_manager.execute_dml_statement(query, [board_title, board_id])
+
+
+def edit_card_title(card_title, card_id):
+    query = f"""
+        UPDATE cards
+        SET title = %s
+        WHERE id = %s;        
+        """
+    return data_manager.execute_dml_statement(query, [card_title, card_id])
 
 
 def add_new_board(board_title):
