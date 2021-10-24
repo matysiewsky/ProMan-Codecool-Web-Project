@@ -21,6 +21,11 @@ export let cardsManager = {
                 "click",
                 editCardTitle
             );
+            domManager.addEventListener(
+                `.delete-card[data-card-id="${card.id}"]`,
+                "click",
+                deleteCard
+            );
 
 
         }
@@ -115,9 +120,19 @@ function editCardTitle(clickEvent) {
     cardField.appendChild(inputField);
     cardField.appendChild(submitButton);
     cardField.appendChild(cancelButton);
+}
 
+async function deleteCard(clickEvent) {
 
-
+    const cardId = clickEvent.target.dataset.cardId;
+    let cardData = await dataHandler.getCard(cardId);
+    let cardHTML = document.querySelector(`div[data-card-id="${cardId}"]`);
+    let boardId = cardData[0]["board_id"];
+    let showCardsButton = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`);
+    await dataHandler.deleteCard(cardId, boardId);
+    if (showCardsButton.textContent === "Hide Cards") {
+        cardHTML.parentElement.removeChild(cardHTML);
+    }
 }
 
 

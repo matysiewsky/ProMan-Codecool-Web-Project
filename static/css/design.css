@@ -34,6 +34,10 @@ button{
     padding: 4px 10px;
 }
 
+.btn{
+    color:white;
+}
+
 .board-container{
     max-width: 960px;
     margin: 0 auto;

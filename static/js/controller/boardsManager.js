@@ -26,6 +26,11 @@ export let boardsManager = {
                 "click",
                 cardsManager.addNewCard
             );
+             domManager.addEventListener(
+                `.delete-board[data-board-id="${board.id}"]`,
+                "click",
+                deleteBoard
+            );
         }
     },
     showNewBoardTitleInput: function () {
@@ -88,14 +93,19 @@ async function showHideButtonHandler(clickEvent) {
     const boardId = clickEvent.target.dataset.boardId;
     let takeButton = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`);
     let board = document.querySelector(`div[data-board-id="${boardId}"]`);
+    let addNewColumnButton = document.querySelector(`.add-new-column[data-board-id="${boardId}"]`);
 
     if (takeButton.textContent === "Show Cards") {
+
         await cardsManager.loadCards(boardId);
+        addNewColumnButton.hidden = false;
         takeButton.textContent = "Hide Cards";
+
     } else if (takeButton.textContent === "Hide Cards") {
         board.querySelectorAll(".card-container").forEach(el => el.remove());
         // board.querySelectorAll(".edit-card-title-button").forEach(el => el.remove());
         takeButton.textContent = "Show Cards";
+        addNewColumnButton.hidden = true;
         }
 }
 
@@ -113,4 +123,13 @@ function createElementOnWebsite(type) {
     }
 }
 
-// CO ROBI clickevent
+async function deleteBoard(clickEvent) {
+    const boardId = clickEvent.target.dataset.boardId;
+    let showCardsButton = document.querySelector(`.toggle-board-button[data-board-id="${boardId}"]`);
+    await dataHandler.deleteBoard(boardId);
+    if (showCardsButton.textContent === "Hide Cards") {
+        cardHTML.parentElement.removeChild(cardHTML);
+    }
+    // DELETE CARDS FROM BOARD AND THEN BOARD
+}
+

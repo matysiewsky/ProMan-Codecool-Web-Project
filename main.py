@@ -85,6 +85,26 @@ def create_new_card(board_id: int):
     card_id = queires.add_new_card(card_title, status_id, card_order, board_id)
     return {'id': card_id[0], 'title': card_title}
 
+
+@app.route("/api/boards/<int:card_id>", methods=['GET'])
+@json_response
+def get_card(card_id: int):
+    """
+    get all card data from board
+    """
+    return queires.get_card(card_id)
+
+
+@app.route("/api/<int:board_id>/<int:card_id>", methods=['DELETE'])
+@json_response
+def delete_card(card_id: int, board_id: int):
+    """
+    get all card data from board
+    """
+    return queires.delete_card(card_id)
+
+
+
 def main():
     app.run(debug=True)
 
